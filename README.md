@@ -2,7 +2,7 @@
 
 myssh wraps ssh connections to override the remote ~/.profile and ~/.bashrc files with your local ~/.mysshrc using netcat locally and  netcat, telnet, or bash's /dev/tcp/ functionality on the remote host
 
-myssh was inspired by [sshrc](https://github.com/Russell91/sshrc) and was created as a one off when I couldn't remember the name of the sshrc project :-D
+myssh was inspired by [sshrc](https://github.com/Russell91/sshrc) and was created as a one-off when I couldn't remember the name of the sshrc project :-D
 
 sshrc is more mature, uses xxd instead of netcat and port forwarding, you probably should use it instead
 
@@ -27,4 +27,4 @@ Thanks to [sshrc](https://github.com/Russell91/sshrc) for the concept
 
 ## Warnings
 
-myssh will sell your first-born for a frapuccino and will kick your dog, you have been warned!
+myssh will trade your first-born for a frapuccino and will kick your dog, you have been warned!
