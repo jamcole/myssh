@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+# How long to leave up netcat and to wait for ssh to connect
+TIMEOUT=10
+NCPORT=12345
+RCFILE="$HOME/.mysshrc"
+
+if [ ! -f $RCFILE ]; then
+	echo $RCFILE does not exist >&2;
+	exit 1;
+fi
+
+if ! which nc>/dev/null; then
+	echo nc command not found >&2;
+	exit 1;
+fi
+
+(timeout $(expr $TIMEOUT + 2) nc -l localhost 12345 <$RCFILE &)
+
+ssh -t -R localhost:$NCPORT:localhost:$NCPORT -oConnectTimeout=$TIMEOUT $@ -- '
+	REMOTERC="$(tempfile)";
+	if which nc>/dev/null; then
+		echo sending '$RCFILE' via tunnel with nc;
+		nc localhost '$NCPORT' >"$REMOTERC";
+	elif which telnet>/dev/null; then
+		echo sending '$RCFILE' via tunnel with telnet;
+		telnet localhost '$NCPORT' 2>/dev/null|sed -e "1,/Escape character/d" >"$REMOTERC";
+	elif exec 3<>/dev/tcp/localhost/'$NCPORT'; then
+		echo sending '$RCFILE' tunnel with /dev/tcp/localhost/'$NCPORT';
+		cat <&3 >"$REMOTERC";
+	else
+		echo Unable to send '$RCFILE' via tunnel with nc, telnet, or bash /dev/tcp/localhost/'$NCPORT' >&2; 
+		exit 1;
+	fi
+	(bash -c "sleep 10; rm -f \"$REMOTERC\"" &);
+	bash --rcfile "$REMOTERC";
+'
