@@ -25,6 +25,7 @@ sshrc is more mature, uses xxd instead of netcat and port forwarding, you probab
 
 Thanks to [sshrc](https://github.com/Russell91/sshrc) for the concept
 
-## Warnings
+## Warnings / Known Issues
 
-**myssh** will trade your first-born for a frapuccino and will kick your dog, you have been warned!
+* If the 12345 port is already in use, myssh will not connect; this is on purpose, you don't want to grab another user's .mysshrc file.  In the future we should drop the remote forwarded port after the file copy.
+* **myssh** will trade your first-born for a frapuccino and will kick your dog, you have been warned!

@@ -19,7 +19,7 @@ fi
 
 (timeout $(expr $TIMEOUT + 2) nc -l localhost 12345 <$RCFILE &)
 
-ssh -t -R localhost:$NCPORT:localhost:$NCPORT -oConnectTimeout=$TIMEOUT $@ -- '
+ssh -t -R localhost:$NCPORT:localhost:$NCPORT -o ExitOnForwardFailure=yes -o ConnectTimeout=$TIMEOUT $@ -- '
 	REMOTERC="$(tempfile)";
 	if which nc>/dev/null; then
 		echo sending '$RCFILE' via tunnel with nc;
